@@ -1,3 +1,8 @@
 export interface EMDKPlugin {
-  echo(options: { value: string }): Promise<{ value: string }>;
+
+  enable(): Promise<void>;
+  disable(): Promise<void>;
+  unlockCradle(): Promise<void>;
+  cradleInfo(): Promise<void>;
+
 }

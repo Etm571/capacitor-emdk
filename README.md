@@ -13,24 +13,48 @@ npx cap sync
 
 <docgen-index>
 
-* [`echo(...)`](#echo)
+* [`enable()`](#enable)
+* [`disable()`](#disable)
+* [`unlockCradle()`](#unlockcradle)
+* [`cradleInfo()`](#cradleinfo)
 
 </docgen-index>
 
 <docgen-api>
 <!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
-### echo(...)
+### enable()
 
 ```typescript
-echo(options: { value: string; }) => Promise<{ value: string; }>
+enable() => Promise<void>
 ```
 
-| Param         | Type                            |
-| ------------- | ------------------------------- |
-| **`options`** | <code>{ value: string; }</code> |
+--------------------
 
-**Returns:** <code>Promise&lt;{ value: string; }&gt;</code>
+
+### disable()
+
+```typescript
+disable() => Promise<void>
+```
+
+--------------------
+
+
+### unlockCradle()
+
+```typescript
+unlockCradle() => Promise<void>
+```
+
+--------------------
+
+
+### cradleInfo()
+
+```typescript
+cradleInfo() => Promise<void>
+```
 
 --------------------
 

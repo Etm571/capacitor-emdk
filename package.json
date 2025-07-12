@@ -13,7 +13,7 @@
     "ios/Sources",
     "ios/Tests",
     "Package.swift",
-    "CapacitorEmdk.podspec"
+    "CapacitorEmdk.podspec",
   ],
   "author": "Bo Gustavsson",
   "license": "MIT",
@@ -62,7 +62,8 @@
     "typescript": "~4.1.5"
   },
   "peerDependencies": {
-    "@capacitor/core": ">=7.0.0"
+    "@capacitor/core": "^6.0.0 || ^7.0.0",
+    "@capacitor/android": "^6.0.0 || ^7.0.0"
   },
   "prettier": "@ionic/prettier-config",
   "swiftlint": "@ionic/swiftlint-config",

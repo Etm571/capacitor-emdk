@@ -3,8 +3,16 @@ import { WebPlugin } from '@capacitor/core';
 import type { EMDKPlugin } from './definitions';
 
 export class EMDKWeb extends WebPlugin implements EMDKPlugin {
-  async echo(options: { value: string }): Promise<{ value: string }> {
-    console.log('ECHO', options);
-    return options;
+  async unlockCradle(): Promise<void> {
+    throw 'EMDK is not supported on web';
+  }
+  async cradleInfo(): Promise<void> {
+    throw 'EMDK is not supported on web';
+  }
+  async enable(): Promise<void> {
+    throw 'EMDK is not supported on web';
+  }
+  async disable(): Promise<void> {
+    throw 'EMDK is not supported on web';
   }
 }

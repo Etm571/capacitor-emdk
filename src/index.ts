@@ -1,5 +1,4 @@
 import { registerPlugin } from '@capacitor/core';
-
 import type { EMDKPlugin } from './definitions';
 
 const EMDK = registerPlugin<EMDKPlugin>('EMDK', {
@@ -8,3 +7,4 @@ const EMDK = registerPlugin<EMDKPlugin>('EMDK', {
 
 export * from './definitions';
 export { EMDK };
+
