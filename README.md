@@ -1,9 +1,9 @@
 # Capacitor EMDK
 
+![capacitor-version](https://img.shields.io/badge/Capacitor-v6--v7-green)
 [![npm version](https://img.shields.io/npm/v/capacitor-emdk.svg)](https://www.npmjs.com/package/capacitor-emdk)
 [![npm downloads](https://img.shields.io/npm/dm/capacitor-emdk.svg)](https://www.npmjs.com/package/capacitor-emdk)
 [![license](https://img.shields.io/npm/l/capacitor-emdk.svg)](https://github.com/etm571/capacitor-emdk/blob/main/LICENSE)
-![capacitor-version](https://img.shields.io/badge/Capacitor-v6--v7-green)
 
 Bridges Zebra's EMDK features to Capacitor
 
@@ -21,7 +21,7 @@ All API methods are **async** and return Promises.
 ```typescript
 import { EMDK } from 'capacitor-emdk';
 
-// Unlock the cradle asynchronously
+// Unlock the cradle
 async function unlockCradle() {
   try {
     await EMDK.unlockCradle();
@@ -31,7 +31,7 @@ async function unlockCradle() {
   }
 }
 
-// Get cradle info asynchronously
+// Get cradle info
 async function getCradleInfo() {
   try {
     const info = await EMDK.cradleInfo();

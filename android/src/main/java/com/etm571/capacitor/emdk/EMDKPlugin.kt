@@ -87,33 +87,6 @@ class EMDKPlugin : Plugin(), EMDKListener {
         }
     }
 
-    @PluginMethod
-    fun flashLeds(call: PluginCall) {
-        if (!isCradleReady) {
-            call.reject("Cradle not ready")
-            return
-        }
-
-        try {
-            val onDuration: Int = call.getInt("onDuration", 2000)!!
-            val offDuration: Int = call.getInt("offDuration", 1000)!!
-            val flashCount: Int = call.getInt("flashCount", 5)!!
-            smoothFlash = call.getBoolean("smoothFlash", false)!!
-
-            val flashInfo = CradleLedFlashInfo(onDuration, offDuration, smoothFlash)
-            val result = personalShopper!!.cradle.flashLed(flashCount, flashInfo)
-
-            if (result == CradleResults.SUCCESS) {
-                val ret = JSObject()
-                ret.put("status", "leds_flashed")
-                call.resolve(ret)
-            } else {
-                call.reject("LED flash failed: " + result.getDescription())
-            }
-        } catch (e: CradleException) {
-            call.reject("LED flash error: " + e.message)
-        }
-    }
 
     @PluginMethod
     fun getCradleInfo(call: PluginCall) {
