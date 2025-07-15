@@ -9,10 +9,4 @@ export class EMDKWeb extends WebPlugin implements EMDKPlugin {
   async cradleInfo(): Promise<void> {
     throw 'EMDK is not supported on web';
   }
-  async enable(): Promise<void> {
-    throw 'EMDK is not supported on web';
-  }
-  async disable(): Promise<void> {
-    throw 'EMDK is not supported on web';
-  }
 }

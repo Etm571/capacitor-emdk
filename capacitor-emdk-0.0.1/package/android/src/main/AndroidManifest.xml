@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <application>
+        <uses-library android:name="com.symbol.emdk"/>
+    </application>
+
+    <queries>
+        <package android:name="com.symbol.emdk.emdkservice" />
+  </queries>
+
+    <uses-permission android:name="com.symbol.emdk.permission.EMDK"/>
+</manifest>
