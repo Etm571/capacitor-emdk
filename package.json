@@ -13,7 +13,7 @@
     "ios/Sources",
     "ios/Tests",
     "Package.swift",
-    "CapacitorEmdk.podspec",
+    "CapacitorEmdk.podspec"
   ],
   "author": "Bo Gustavsson",
   "license": "MIT",

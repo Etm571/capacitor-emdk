@@ -11,140 +11,147 @@ import com.getcapacitor.annotation.CapacitorPlugin;
 import com.symbol.emdk.EMDKManager;
 import com.symbol.emdk.EMDKResults;
 import com.symbol.emdk.personalshopper.*;
+import android.os.Handler;
+import android.os.Looper;
 
 @CapacitorPlugin(name = "EMDK")
 public class EMDKPlugin extends Plugin implements EMDKManager.EMDKListener {
 
     private EMDKManager emdkManager;
     private PersonalShopper personalShopper;
+    private boolean isCradleReady = false;
+    private boolean smoothFlash = false;
 
     @Override
     public void load() {
         EMDKResults results = EMDKManager.getEMDKManager(getContext(), this);
         if (results.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
-            Log.e("EMDK", "Failed to get EMDKManager: " + results.statusCode);
-        } else {
-            Log.i("EMDK", "getEMDKManager success");
+            String errorMessage = "EMDK initialization failed: " + results.statusCode;
+            Log.e("EMDK", errorMessage);
+
+            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                notifyListeners("emdkError", new JSObject().put("error", errorMessage));
+            }, 1000);
         }
+
     }
 
     @Override
     public void onOpened(EMDKManager manager) {
-        Log.i("EMDK", "EMDK opened");
         this.emdkManager = manager;
         try {
             personalShopper = (PersonalShopper) emdkManager.getInstance(EMDKManager.FEATURE_TYPE.PERSONALSHOPPER);
+
             if (personalShopper != null && personalShopper.cradle != null) {
-                personalShopper.cradle.enable();
+                if (!personalShopper.cradle.isEnabled()){
+                    personalShopper.cradle.enable();
+                }
+                isCradleReady = true;
+                notifyListeners("emdkReady", new JSObject().put("ready", true));
+            } else {
+                notifyListeners("emdkError", new JSObject().put("error", "PersonalShopper not available"));
             }
         } catch (Exception e) {
-            Log.e("EMDK", "Error initializing PersonalShopper: " + e.getMessage(), e);
-        }
-    }
-
-    @Override
-    public void onClosed() {
-        if (emdkManager != null) {
-            emdkManager.release();
-            emdkManager = null;
-        }
-        personalShopper = null;
-    }
-
-    @PluginMethod
-    public void enable(PluginCall call) {
-        try {
-            if (personalShopper != null && personalShopper.cradle != null) {
-                personalShopper.cradle.enable();
-                call.resolve();
-            } else {
-                call.reject("EMDK or cradle not ready");
-            }
-        } catch (CradleException e) {
-            Log.e("EMDK", "Enable failed", e);
-            call.reject("Enable failed: " + e.getMessage());
-        }
-    }
-
-    @PluginMethod
-    public void disable(PluginCall call) {
-        try {
-            if (personalShopper != null && personalShopper.cradle != null) {
-                personalShopper.cradle.disable();
-                call.resolve();
-            } else {
-                call.reject("EMDK or cradle not ready");
-            }
-        } catch (CradleException e) {
-            Log.e("EMDK", "Disable failed", e);
-            call.reject("Disable failed: " + e.getMessage());
-        }
-    }
-
-    @PluginMethod
-    public void cradleInfo(PluginCall call) {
-        try {
-            if (personalShopper != null && personalShopper.cradle != null) {
-                CradleInfo info = personalShopper.cradle.getCradleInfo();
-
-                JSObject result = new JSObject();
-                result.put("firmwareVersion", info.getFirmwareVersion());
-                result.put("dateOfManufacture", info.getDateOfManufacture());
-                result.put("hardwareID", info.getHardwareID());
-                result.put("partNumber", info.getPartNumber());
-                result.put("serialNumber", info.getSerialNumber());
-
-                call.resolve(result);
-            } else {
-                call.reject("EMDK or cradle not ready");
-            }
-        } catch (CradleException e) {
-            Log.e("EMDK", "Cradle info failed", e);
-            call.reject("Cradle info failed: " + e.getMessage());
+            Log.e("EMDK", "Initialization error", e);
+            notifyListeners("emdkError", new JSObject().put("error", e.getMessage()));
         }
     }
 
     @PluginMethod
     public void unlockCradle(PluginCall call) {
+        if (!isCradleReady) {
+            call.reject("Cradle not ready");
+            return;
+        }
+
         try {
-            if (personalShopper != null && personalShopper.cradle != null) {
-                int onDuration = 500;
-                int offDuration = 500;
-                int unlockDuration = 15;
-                boolean smoothFlash = false;
+            int onDuration = call.getInt("onDuration", 500);
+            int offDuration = call.getInt("offDuration", 500);
+            int unlockDuration = call.getInt("unlockDuration", 15);
+            smoothFlash = call.getBoolean("smoothFlash", false);
 
-                CradleLedFlashInfo flashInfo = new CradleLedFlashInfo(onDuration, offDuration, smoothFlash);
-                CradleResults result = personalShopper.cradle.unlock(unlockDuration, flashInfo);
+            CradleLedFlashInfo flashInfo = new CradleLedFlashInfo(onDuration, offDuration, smoothFlash);
+            CradleResults result = personalShopper.cradle.unlock(unlockDuration, flashInfo);
 
-                if (result == CradleResults.SUCCESS) {
-                    JSObject res = new JSObject();
-                    res.put("status", "unlocked");
-                    call.resolve(res);
-                } else {
-                    call.reject("Unlock failed: " + result.getDescription());
-                }
+            if (result == CradleResults.SUCCESS) {
+                JSObject ret = new JSObject();
+                ret.put("status", "unlocked");
+                call.resolve(ret);
             } else {
-                call.reject("EMDK or cradle not ready");
+                call.reject("Unlock failed: " + result.getDescription());
             }
         } catch (CradleException e) {
-            Log.e("EMDK", "Unlock failed", e);
-            call.reject("Unlock failed: " + e.getMessage());
+            call.reject("Unlock error: " + e.getMessage());
+        }
+    }
+
+    @PluginMethod
+    public void flashLeds(PluginCall call) {
+        if (!isCradleReady) {
+            call.reject("Cradle not ready");
+            return;
+        }
+
+        try {
+            int onDuration = call.getInt("onDuration", 2000);
+            int offDuration = call.getInt("offDuration", 1000);
+            int flashCount = call.getInt("flashCount", 5);
+            smoothFlash = call.getBoolean("smoothFlash", false);
+
+            CradleLedFlashInfo flashInfo = new CradleLedFlashInfo(onDuration, offDuration, smoothFlash);
+            CradleResults result = personalShopper.cradle.flashLed(flashCount, flashInfo);
+
+            if (result == CradleResults.SUCCESS) {
+                JSObject ret = new JSObject();
+                ret.put("status", "leds_flashed");
+                call.resolve(ret);
+            } else {
+                call.reject("LED flash failed: " + result.getDescription());
+            }
+        } catch (CradleException e) {
+            call.reject("LED flash error: " + e.getMessage());
+        }
+    }
+
+    @PluginMethod
+    public void getCradleInfo(PluginCall call) {
+        if (!isCradleReady) {
+            call.reject("Cradle not ready");
+            return;
+        }
+
+        try {
+            CradleInfo info = personalShopper.cradle.getCradleInfo();
+            JSObject result = new JSObject();
+            result.put("firmwareVersion", info.getFirmwareVersion());
+            result.put("dateOfManufacture", info.getDateOfManufacture());
+            result.put("hardwareID", info.getHardwareID());
+            result.put("partNumber", info.getPartNumber());
+            result.put("serialNumber", info.getSerialNumber());
+            call.resolve(result);
+        } catch (CradleException e) {
+            call.reject("Cradle info error: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public void onClosed() {
+        isCradleReady = false;
+        if (personalShopper != null && personalShopper.cradle != null) {
+            try {
+                personalShopper.cradle.disable();
+            } catch (CradleException e) {
+                Log.e("EMDK", "Disable error", e);
+            }
+        }
+        if (emdkManager != null) {
+            emdkManager.release();
+            emdkManager = null;
         }
     }
 
     @Override
     protected void handleOnDestroy() {
-        try {
-            if (personalShopper != null && personalShopper.cradle != null) {
-                personalShopper.cradle.disable();
-            }
-        } catch (CradleException e) {
-            Log.e("EMDK", "Disable on destroy failed", e);
-        }
-
-        if (emdkManager != null) {
-            emdkManager.release();
-            emdkManager = null;
-        }
+        onClosed();
     }
 }

@@ -48,11 +48,26 @@ repositories {
 }
 
 
+configurations {
+    embed
+    implementation.extendsFrom(embed)
+}
+
 dependencies {
-    implementation files('libs/*.jar')
+    compileOnly files('libs/emdk.jar')
+    
+    embed files('libs/emdk.jar')
+    
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     testImplementation "junit:junit:$junitVersion"
     androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
     androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
 }
+
+task copyEmbeddedDependencies(type: Copy) {
+    from configurations.embed
+    into "$buildDir/libs/"
+}
+
+preBuild.dependsOn copyEmbeddedDependencies
