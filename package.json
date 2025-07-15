@@ -1,7 +1,7 @@
 {
   "name": "capacitor-emdk",
-  "version": "0.0.1",
-  "description": "Bridges Zebra's EMDK feats to Capacitor",
+  "version": "0.1.0",
+  "description": "Bridges Zebra's EMDK features to Capacitor",
   "main": "dist/plugin.cjs.js",
   "module": "dist/esm/index.js",
   "types": "dist/esm/index.d.ts",
