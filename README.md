@@ -4,8 +4,14 @@
 [![npm version](https://img.shields.io/npm/v/capacitor-emdk.svg)](https://www.npmjs.com/package/capacitor-emdk)
 [![npm downloads](https://img.shields.io/npm/dm/capacitor-emdk.svg)](https://www.npmjs.com/package/capacitor-emdk)
 [![license](https://img.shields.io/npm/l/capacitor-emdk.svg)](https://github.com/etm571/capacitor-emdk/blob/main/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://github.com/etm571/capacitor-emdk/pulls)
+[![Issues](https://img.shields.io/github/issues/etm571/capacitor-emdk.svg)](https://github.com/etm571/capacitor-emdk/issues)
 
-Bridges Zebra's EMDK features to Capacitor
+Bridges (some) Zebra's EMDK features to Capacitor
+
+> **Disclaimer:**  
+> This is a community project and is **not affiliated with Zebra Technologies**.  
+> Due to legal reasons, you must manually download the EMDK SDK from [Zebra's offical mirror](https://verve.jfrog.io/artifactory/verve-gradle-release/com/symbol/emdk/9.1.1/emdk-9.1.1.jar), rename the file to `emdk.jar`, and copy it to `node_modules/capacitor-emdk/android/libs`.
 
 ## Install
 
