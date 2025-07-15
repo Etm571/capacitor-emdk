@@ -53,30 +53,31 @@ async function getCradleInfo() {
 <docgen-index>
 
 * [`unlockCradle()`](#unlockcradle)
-* [`cradleInfo()`](#cradleinfo)
+* [`getCradleInfo()`](#getcradleinfo)
 
 </docgen-index>
 
 <docgen-api>
+<!--Update the source file JSDoc comments and rerun docgen to update the docs below-->
 
 ### unlockCradle()
 
 ```typescript
-unlockCradle() => Promise<void>
+unlockCradle() => Promise<{ status: string; }>
 ```
 
-Unlocks the cradle
+**Returns:** <code>Promise&lt;{ status: string; }&gt;</code>
 
 --------------------
 
 
-### cradleInfo()
+### getCradleInfo()
 
 ```typescript
-cradleInfo() => Promise<void>
+getCradleInfo() => Promise<{ firmwareVersion: string; dateOfManufacture: string; hardwareID: string; partNumber: string; serialNumber: string; }>
 ```
 
-Receives cradle info
+**Returns:** <code>Promise&lt;{ firmwareVersion: string; dateOfManufacture: string; hardwareID: string; partNumber: string; serialNumber: string; }&gt;</code>
 
 --------------------
 
