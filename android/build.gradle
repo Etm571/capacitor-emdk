@@ -65,8 +65,6 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.16.0'
     compileOnly files('libs/emdk.jar')
     
-    embed files('libs/emdk.jar')
-    
     implementation project(':capacitor-android')
     implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
     testImplementation "junit:junit:$junitVersion"
