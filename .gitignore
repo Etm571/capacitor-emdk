@@ -39,8 +39,6 @@ bin
 gen
 out
 
-android/libs/*.jar
-
 # Gradle files
 .gradle
 build

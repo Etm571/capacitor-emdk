@@ -11,7 +11,6 @@ Bridges (some) Zebra's EMDK features to Capacitor
 
 > **Disclaimer:**  
 > This is a community project and is **not affiliated with Zebra Technologies**.  
-> Due to legal reasons, you must manually download the EMDK SDK from [Zebra's offical mirror](https://verve.jfrog.io/artifactory/verve-gradle-release/com/symbol/emdk/9.1.1/emdk-9.1.1.jar), rename the file to `emdk.jar`, and copy it to `node_modules/capacitor-emdk/android/libs`.
 
 ## Install
 
