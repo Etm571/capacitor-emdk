@@ -9,6 +9,8 @@
 
 Bridges (some) Zebra's EMDK features to Capacitor
 
+Demo app: https://GitHub.com/etm571/capacitor-emdk-demo
+
 > **Disclaimer:**  
 > This is a community project and is **not affiliated with Zebra Technologies**.  
 
