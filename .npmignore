@@ -1,0 +1,12 @@
+.git
+.github
+.vscode
+.idea
+
+node_modules
+android/.gradle
+android/build
+android/local.properties
+
+*.log
+.DS_Store
